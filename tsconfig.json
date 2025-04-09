@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+      "typeRoots": ["./node_modules/@types", "./src/types"],
       "target": "ES6",
       "module": "CommonJS",
       "outDir": "./dist",
@@ -9,8 +10,9 @@
       "skipLibCheck": true,
       "forceConsistentCasingInFileNames": true,
       "moduleResolution": "node",
-      "sourceMap": true
+      "sourceMap": true,
+      "types": ["node"]  
     },
-    "include": ["src/**/*"],
+    "include": ["src/**/*.ts"],
     "exclude": ["node_modules"]
   }
