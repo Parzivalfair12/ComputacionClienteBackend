@@ -2,9 +2,15 @@ import { Router } from "express";
 import { body } from "express-validator";
 import { UserController } from "../controllers/UserController";
 import { handleInputErrors } from "../middlewares/Validation";
-import { authMiddleware } from "../middlewares/auth";
 
 const router = Router();
+
+/**
+ * @swagger
+ * tags:
+ *   name: Users
+ *   description: Gestión de usuarios
+ */
 
 /**
  * @swagger
@@ -63,6 +69,13 @@ router.post(
   handleInputErrors,
   UserController.CreateUser
 );
+
+/**
+ * @swagger
+ * tags:
+ *   name: Auth
+ *   description: Gestión autenticación
+ */
 
 /**
  * @swagger
