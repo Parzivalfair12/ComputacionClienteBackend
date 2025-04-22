@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import User from "../models/User";
+import { generateToken } from "../helpers/jwt"; 
 
 export class UserController {
   static CreateUser = async (req: Request, res: Response) => {
@@ -35,7 +36,7 @@ export class UserController {
         res.status(400).json({
           message: "Email y contraseña son obligatorios",
         });
-        return;
+        return 
       }
 
       const user = await User.findOne({ email }).select("+password");
@@ -55,12 +56,15 @@ export class UserController {
         return;
       }
 
+      const token = generateToken(user.id.toString(), user.role);
+
       res.json({
         id: user._id,
         name: user.name,
         email: user.email,
         role: user.role,
         confirmado: user.confirmado,
+        token, 
       });
     } catch (error) {
       res.status(500).json({

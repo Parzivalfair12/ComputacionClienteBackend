@@ -2,6 +2,7 @@ import { Router } from "express";
 import { body } from "express-validator";
 import { UserController } from "../controllers/UserController";
 import { handleInputErrors } from "../middlewares/Validation";
+import { authMiddleware } from "../middlewares/auth";
 
 const router = Router();
 
@@ -43,7 +44,7 @@ const router = Router();
  *               $ref: '#/components/schemas/Error'
  */
 router.post(
-  "/",
+  "/", 
   body("name")
     .notEmpty()
     .withMessage("El nombre es obligatorio")
