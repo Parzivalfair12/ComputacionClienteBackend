@@ -1,9 +1,12 @@
 import express from "express";
 import dotenv from "dotenv";
 import { ConnectDB } from "./config/db";
+import { swaggerSetup } from "./config/swagger";
+
+// Importaciones routes
 import UserRoutes from "./routes/UserRoutes";
 import ProductRoutes from "./routes/ProductRoutes"
-import { swaggerSetup } from "./config/swagger";
+import InventoryRoutes from "./routes/InventoryRoutes"
 
 dotenv.config();
 
@@ -19,6 +22,6 @@ swaggerSetup(app);
 // Routes
 app.use("/api/users", UserRoutes);
 app.use("/api/products", ProductRoutes);
-
+app.use("/api/inventory", InventoryRoutes);
 
 export default app;

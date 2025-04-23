@@ -105,6 +105,105 @@ const options: swaggerJsdoc.Options = {
             }
           }
         },
+        Inventory: {
+          type: "object",
+          required: ["product", "amount", "location", "movement", "reason", "user"],
+          properties: {
+            product: {
+              type: "string",
+              format: "mongo-id",
+              example: "507f1f77bcf86cd799439011",
+              description: "Referencia al producto (ID)"
+            },
+            amount: {
+              type: "number",
+              example: 10,
+              minimum: 0.01,
+              description: "Cantidad del movimiento"
+            },
+            location: {
+              type: "string",
+              example: "Almacén Principal",
+              enum: ["Almacén Principal", "Almacén Secundario", "Mostrador", "Tránsito"],
+              description: "Ubicación física del inventario"
+            },
+            movement: {
+              type: "string",
+              enum: ["entrada", "salida", "ajuste"],
+              example: "entrada",
+              description: "Tipo de movimiento"
+            },
+            reason: {
+              type: "string",
+              example: "Compra a proveedor",
+              enum: [
+                "Compra a proveedor",
+                "Venta al público",
+                "Ajuste de inventario",
+                "Donación",
+                "Pérdida"
+              ],
+              description: "Motivo del movimiento"
+            },
+            user: {
+              type: "string",
+              format: "mongo-id",
+              example: "6118e9f65ef21b001f3e8e7c",
+              description: "Usuario que registró el movimiento (ID)"
+            },
+            reference: {
+              type: "string",
+              example: "FAC-2023-001",
+              nullable: true,
+              description: "Número de factura/documento asociado"
+            },
+            notes: {
+              type: "string",
+              example: "Producto con lote #12345",
+              maxLength: 500,
+              nullable: true,
+              description: "Observaciones adicionales"
+            },
+            expirationDate: {
+              type: "string",
+              format: "date",
+              example: "2023-12-31",
+              nullable: true,
+              description: "Fecha de vencimiento (opcional)"
+            },
+            batch: {
+              type: "string",
+              example: "LOTE-2023-05",
+              nullable: true,
+              description: "Número de lote"
+            }
+          }
+        },
+    
+        InventoryResponse: {
+          type: "object",
+          properties: {
+            success: { type: "boolean", example: true },
+            data: {
+              type: "object",
+              properties: {
+                id: { type: "string", example: "6118e9f65ef21b001f3e8e7c" },
+                product: { 
+                  type: "object",
+                  properties: {
+                    id: { type: "string", example: "507f1f77bcf86cd799439011" },
+                    name: { type: "string", example: "Pan Integral" },
+                    sku: { type: "string", example: "PAN-INT-500" }
+                  }
+                },
+                amount: { type: "number", example: 10 },
+                movement: { type: "string", example: "entrada" },
+                location: { type: "string", example: "Almacén Principal" },
+                createdAt: { type: "string", format: "date-time", example: "2023-05-15T10:00:00Z" }
+              }
+            }
+          }
+        },
         Error: {
           type: "object",
           properties: {

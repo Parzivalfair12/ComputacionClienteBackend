@@ -2,49 +2,50 @@ import mongoose, { Schema, Document } from "mongoose";
 import { IProduct } from "./Product";
 
 export interface IInventory extends Document {
-  producto: IProduct['_id'];
-  cantidad: number;
-  ubicacion: string;
-  movimiento: 'entrada' | 'salida';
-  motivo: string;
-  usuario: mongoose.Types.ObjectId;
+  product: IProduct['_id'];
+  amount: number;
+  location: string;
+  movement: 'entrada' | 'salida';
+  reason: string;
+  user: mongoose.Types.ObjectId;
 }
 
 const InventorySchema: Schema = new Schema(
   {
-    producto: {
+    product: {
       type: Schema.Types.ObjectId,
       ref: 'Product',
       required: true,
     },
-    cantidad: {
+    amount: {
       type: Number,
       required: true,
       min: 1,
     },
-    ubicacion: {
+    location: {
       type: String,
       required: true,
       trim: true,
     },
-    movimiento: {
+    movement: {
       type: String,
       enum: ['entrada', 'salida'],
       required: true,
     },
-    motivo: {
+    reason: {
       type: String,
       required: true,
       trim: true,
     },
-    usuario: {
+    user: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
+      required: false,
     },
   },
   {
     timestamps: true,
+    strictPopulate: false
   }
 );
 
