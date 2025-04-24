@@ -7,8 +7,6 @@ export interface IEvent extends Document {
   fechaInicio: Date;
   fechaFin: Date;
   ubicacion: string;
-  organizador: IUser['_id'];
-  participantes: mongoose.Types.ObjectId[];
   estado: 'activo' | 'cancelado' | 'completado';
   imagen: string;
 }
@@ -36,15 +34,6 @@ const EventSchema: Schema = new Schema(
       type: String,
       required: true,
     },
-    organizador: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
-    participantes: [{
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-    }],
     estado: {
       type: String,
       enum: ['activo', 'cancelado', 'completado'],
@@ -57,6 +46,7 @@ const EventSchema: Schema = new Schema(
   },
   {
     timestamps: true,
+    strictPopulate: false
   }
 );
 

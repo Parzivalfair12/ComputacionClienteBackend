@@ -7,6 +7,7 @@ import { swaggerSetup } from "./config/swagger";
 import UserRoutes from "./routes/UserRoutes";
 import ProductRoutes from "./routes/ProductRoutes"
 import InventoryRoutes from "./routes/InventoryRoutes"
+import EventRoutes from "./routes/EventRoutes"
 
 dotenv.config();
 
@@ -23,5 +24,6 @@ swaggerSetup(app);
 app.use("/api/users", UserRoutes);
 app.use("/api/products", ProductRoutes);
 app.use("/api/inventory", InventoryRoutes);
+app.use("/api/events", EventRoutes);
 
 export default app;
