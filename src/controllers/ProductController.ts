@@ -199,15 +199,7 @@ export class ProductController {
       res.json({
         success: true,
         data: {
-          id: product._id,
-          name: product.name,
-          description: product.description,
-          price: product.price,
-          caregory: product.category,
-          stock: product.stock,
-          sku: product.sku,
-          status: product.status,
-          image: product.image,
+          product
         },
       });
       return;

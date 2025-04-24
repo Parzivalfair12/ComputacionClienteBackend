@@ -113,6 +113,135 @@ router.post(
 /**
  * @swagger
  * /api/inventory:
+ *   put:
+ *     summary: Actualiza un movimiento de inventario existente
+ *     tags: [Inventory]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id
+ *               - product
+ *               - amount
+ *               - location
+ *               - movement
+ *               - reason
+ *             properties:
+ *               id:
+ *                 type: string
+ *                 description: ID del movimiento de inventario (MongoID válido)
+ *                 example: "507f1f77bcf86cd799439011"
+ *               product:
+ *                 type: string
+ *                 description: ID del inventario (MongoID válido)
+ *                 example: "507f1f77bcf86cd799439011"
+ *               amount:
+ *                 type: number
+ *                 description: Cantidad del movimiento (mayor a 0)
+ *                 example: 10
+ *               location:
+ *                 type: string
+ *                 description: Ubicación del movimiento
+ *                 example: "Almacén Central"
+ *               movement:
+ *                 type: string
+ *                 description: Tipo de movimiento (entrada/salida)
+ *                 enum: [entrada, salida]
+ *                 example: "entrada"
+ *               reason:
+ *                 type: string
+ *                 description: Razón del movimiento
+ *                 example: "Compra a proveedor"
+ *     responses:
+ *       200:
+ *         description: Movimiento actualizado correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Movimiento actualizado correctamente"
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       example: "507f1f77bcf86cd799439011"
+ *                     productId:
+ *                       type: string
+ *                       example: "507f1f77bcf86cd799439012"
+ *                     userId:
+ *                       type: string
+ *                       example: "507f1f77bcf86cd799439013"
+ *                     amount:
+ *                       type: number
+ *                       example: 10
+ *                     movement:
+ *                       type: string
+ *                       example: "entrada"
+ *       400:
+ *         description: Error de validación en los datos de entrada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Error de validación"
+ *                 errors:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                   example: ["ID de producto no válido", "La cantidad debe ser mayor a cero"]
+ *       401:
+ *         description: No autorizado (token inválido o no proporcionado)
+ *       404:
+ *         description: Movimiento no encontrado
+ *       500:
+ *         description: Error interno del servidor
+ */
+
+/**
+ * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ */
+router.put(
+  "/",
+  authMiddleware,
+  [
+    body("product")
+      .notEmpty().withMessage("El producto es requerido")
+      .isMongoId().withMessage("ID de producto no válido"),
+    body("amount")
+      .notEmpty().withMessage("La cantidad es requerida"),
+    body("location")
+      .notEmpty().withMessage("La ubicación es requerida"),
+    body("movement")
+      .notEmpty().withMessage("El tipo de movimiento es requerido")
+      .isIn(["entrada", "salida"]).withMessage("Tipo de movimiento no válido"),
+    body("reason")
+      .notEmpty().withMessage("La razón del movimiento es requerida")
+  ],
+  handleInputErrors,
+  InventoryController.updateMovement
+);
+
+/**
+ * @swagger
+ * /api/inventory:
  *   get:
  *     summary: Obtiene todos los movimientos de inventario
  *     tags: [Inventory]

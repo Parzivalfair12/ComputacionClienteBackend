@@ -50,10 +50,66 @@ export class InventoryController {
     }
   };
 
+  static updateMovement = async (req: Request, res: Response) => {
+    const { id,product, amount, location, movement, reason } = req.body;
+
+    try {
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        res.status(400).json({ message: "ID de movimiento no válido" });
+        return;
+      }
+
+      const existingMovement = await Inventory.findById(id);
+      if (!existingMovement) {
+        res.status(404).json({ message: "Movimiento no encontrado" });
+        return;
+      }
+
+      if (product && !mongoose.Types.ObjectId.isValid(product)) {
+        res.status(400).json({ message: "ID de producto no válido" });
+        return;
+      }
+
+      const updatedMovement = await Inventory.findByIdAndUpdate(
+        id,
+        {
+          product,
+          amount,
+          location,
+          movement,
+          reason,
+        },
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
+
+      res.status(200).json({
+        message: "Movimiento actualizado correctamente",
+        data: {
+          updatedMovement,
+        },
+      });
+    } catch (error) {
+      if (error instanceof mongoose.Error.ValidationError) {
+        const errors = Object.values(error.errors).map((err) => err.message);
+        res.status(400).json({ message: "Error de validación", errors });
+        return;
+      }
+
+      res.status(500).json({
+        message: "Error interno del servidor",
+      });
+    }
+  };
+
   static GetAllInventories = async (req: Request, res: Response) => {
     try {
-      const inventories = await Inventory.find().sort({ createdAt: -1 }).populate('product', 'name sku') // <-- Cambiado de 'producto' a 'product'
-      .populate('user', 'name email');;
+      const inventories = await Inventory.find()
+        .sort({ createdAt: -1 })
+        .populate("product", "name sku") // <-- Cambiado de 'producto' a 'product'
+        .populate("user", "name email");
 
       res.json({
         success: true,
@@ -93,7 +149,7 @@ export class InventoryController {
       res.json({
         success: true,
         data: {
-          inventory
+          inventory,
         },
       });
     } catch (error: unknown) {
