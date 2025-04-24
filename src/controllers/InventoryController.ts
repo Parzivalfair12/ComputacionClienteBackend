@@ -93,11 +93,7 @@ export class InventoryController {
       res.json({
         success: true,
         data: {
-          id: inventory._id,
-          amount: inventory.amount,
-          location: inventory.location,
-          movement: inventory.movement,
-          reason: inventory.reason,
+          inventory
         },
       });
     } catch (error: unknown) {
